@@ -40,10 +40,21 @@
 
     <section class="section__container buttons__container">
         <div class="webadmin_dashboard_buttons_container">
-            <a href="addCategory.php"><button class="big-button">Add Category</button></a>
-            <a href="addProduct.php"><button class="big-button">Add Product</button></a>
+            <a href="addCategory.php"><button class="big-button">Add New Category</button></a>
+
         </div>
 
+    </section>
+
+    <section class="section__container">
+        <h2 class="section__header">Available Categories</h2>
+        <div class="webadmin_dashboard_accommodation_container">
+
+          
+
+
+
+        </div>
     </section>
 
 
