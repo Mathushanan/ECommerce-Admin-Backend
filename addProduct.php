@@ -64,9 +64,6 @@
 
 
 
-    <?php include("footer.php") ?>
-
-
 
 
 
