@@ -26,9 +26,9 @@
     <nav>
         <div class="nav__logo"><span id="uni">Emerald</span><span id="nest">Shop</span></span></div>
         <ul class="nav__links">
-            <li class="link"><a href="#blog_section">Home</a></li>
-            <li class="link"><a href="#home_section">Categories</a></li>
-            <li class="link"><a href="#new_accommodations_section">Products</a></li>
+            <li class="link"><a href="index.php">Home</a></li>
+            <li class="link"><a href="manageCategory.php">Categories</a></li>
+            <li class="link"><a href="manageProduct.php">Products</a></li>
 
         </ul>
     </nav>
@@ -38,8 +38,8 @@
         <div class="webadmin_dashboard_buttons_container">
             <a href="manageCategory.php"><button class="big-button">Manage Categories</button></a>
             <a href="manageProduct.php"><button class="big-button">Manage Products</button></a>
-
         </div>
+
     </section>
 
 

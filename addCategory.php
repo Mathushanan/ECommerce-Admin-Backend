@@ -118,46 +118,46 @@ $navMenu = buildMenu($categories);
                     <div class="field input">
                         <label for="parent_id">Parent Category</label><br>
 
+
+
+
+
+
+                        <select id="parent_id" name="parent_id">
+                            <option value="NULL">Main</option>
+                            <?php
+                            function buildCategoryOptions($categories, $parent_id = 0, $prefix = '')
+                            {
+                                global $connection;
+                                $html = '';
+                                foreach ($categories as $category) {
+                                    if ($category['parentId'] == $parent_id) {
+                                        $category_name = $prefix . $category['name'];
+                                        $html .= '<option value="' . $category['id'] . '">' . $category_name . '</option>';
+                                        $html .= buildCategoryOptions($categories, $category['id'], $category_name . '-');
+                                    }
+                                }
+                                return $html;
+                            }
+
+                            $query = "SELECT id, name, parentId FROM categories";
+                            $result = mysqli_query($connection, $query);
+                            $all_categories = array();
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $all_categories[] = $row;
+                            }
+
+                            echo buildCategoryOptions($all_categories);
+                            ?>
+                        </select>
+
                     </div>
 
-
-
-
-
-                    <select id="parent_id" name="parent_id">
-                        <option value="NULL">Main</option>
-                        <?php
-                        function buildCategoryOptions($categories, $parent_id = 0, $prefix = '')
-                        {
-                            global $connection;
-                            $html = '';
-                            foreach ($categories as $category) {
-                                if ($category['parentId'] == $parent_id) {
-                                    $category_name = $prefix . $category['name'];
-                                    $html .= '<option value="' . $category['id'] . '">' . $category_name . '</option>';
-                                    $html .= buildCategoryOptions($categories, $category['id'], $category_name . '-');
-                                }
-                            }
-                            return $html;
-                        }
-
-                        $query = "SELECT id, name, parentId FROM categories";
-                        $result = mysqli_query($connection, $query);
-                        $all_categories = array();
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $all_categories[] = $row;
-                        }
-
-                        echo buildCategoryOptions($all_categories);
-                        ?>
-                    </select>
-
-                    <br><br>
 
                     <input type="submit" value="Add Category" class="btn">
                 </form>
                 <br>
-                <a href="index.php">Back to Dashboard</a>
+                <a href="manageCategory.php">Back to Dashboard</a>
             </div>
 
         </section>

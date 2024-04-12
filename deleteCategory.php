@@ -4,34 +4,26 @@ include("config.php");
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["name"];
+
     $parentId = $_POST["parent_id"];
 
-    if ($parentId === "NULL") {
-        $parentId = NULL;
-    }
+    $query = "DELETE FROM categories WHERE id=?";
+    $stmt = mysqli_prepare($connection, $query);
 
-    if (empty($name)) {
-        $error = "Category name is required";
+    mysqli_stmt_bind_param($stmt, "i", $parentId);
+
+    $result = mysqli_stmt_execute($stmt);
+
+    if ($result) {
+        $success = "Category deleted successfully";
     } else {
-
-        $query = "INSERT INTO categories (name, parentId) VALUES (?, ?)";
-        $stmt = mysqli_prepare($connection, $query);
-
-        mysqli_stmt_bind_param($stmt, "si", $name, $parentId);
-
-
-        $result = mysqli_stmt_execute($stmt);
-
-        if ($result) {
-            $success = "Category added successfully";
-        } else {
-            $error = "Failed to add category";
-        }
-
-        mysqli_stmt_close($stmt);
+        $error = "Failed to delete category";
     }
+
+    mysqli_stmt_close($stmt);
 }
+
+var_dump($_POST);
 
 
 $query = "SELECT id, name, parentId FROM categories";
@@ -111,15 +103,10 @@ $navMenu = buildMenu($categories);
 
                     <div class="field input">
                         <label for="parent_id">Parent Category</label><br>
-                    </div>
-
-                    <div class="field input">
-                        <label for="name">New Category Name</label>
-                        <input type="text" id="name" name="name"><br>
-                    </div>
+                   
 
                     <select id="parent_id" name="parent_id">
-                        <option value="NULL">Main</option>
+
                         <?php
                         function buildCategoryOptions($categories, $parent_id = 0, $prefix = '')
                         {
@@ -146,12 +133,14 @@ $navMenu = buildMenu($categories);
                         ?>
                     </select>
 
-                    <br><br>
+                    </div>
+
+                    
 
                     <input type="submit" value="Add Category" class="btn">
                 </form>
                 <br>
-                <a href="index.php">Back to Dashboard</a>
+                <a href="manageCategory.php">Back to Dashboard</a>
             </div>
 
         </section>
