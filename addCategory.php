@@ -2,6 +2,40 @@
 
 include("config.php");
 
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST["name"];
+    $parentId = $_POST["parent_id"];
+
+    if ($parentId === "NULL") {
+        $parentId = NULL;
+    }
+
+    if (empty($name)) {
+        $error = "Category name is required";
+    } else {
+        // Prepare the query
+        $query = "INSERT INTO categories (name, parentId) VALUES (?, ?)";
+        $stmt = mysqli_prepare($connection, $query);
+
+        // Bind parameters
+        mysqli_stmt_bind_param($stmt, "si", $name, $parentId);
+
+        // Execute the statement
+        $result = mysqli_stmt_execute($stmt);
+
+        if ($result) {
+            $success = "Category added successfully";
+        } else {
+            $error = "Failed to add category";
+        }
+
+        // Close statement
+        mysqli_stmt_close($stmt);
+    }
+}
+
+
 $query = "SELECT id, name, parentId FROM categories";
 $result = mysqli_query($connection, $query);
 
@@ -18,7 +52,7 @@ function buildMenu($categories, $parent_id = 0, $level = 0)
     $html = '<ul>';
     foreach ($categories as $category) {
         if ($category['parentId'] == $parent_id) {
-            $html .= '<li style="padding-left: ' . (20 * $level) . 'px;"><a href="#" onclick="toggleSubMenu(' . $category['id'] . ')">' . $category['name'] . '</a>';
+            $html .= '<li style="padding-left: ' . (20 * $level) . 'px;"><a href="#" onclick="toggleSubMenu(' . $category['id'] . ')">' . $category['name'] . ' <i class="fa-solid fa-caret-down"></i></a>';
 
             $html .= '<ul id="submenu_' . $category['id'] . '" style="display:none;">';
             $html .= buildMenu($categories, $category['id'], $level + 1);
@@ -53,21 +87,80 @@ $navMenu = buildMenu($categories);
 </head>
 
 <body>
-    <button id="toggleButton">Toggle Sidebar</button> <!-- Button to toggle sidebar -->
 
 
-    <!-- Main content container -->
     <div class="main-content">
 
         <section class="section__container buttons__container">
             <div class="webadmin_dashboard_buttons_container">
-                <div class="webadmin_dashboard_accommodation_container">
 
-                    <nav id="sidebar">
-                        <?php echo $navMenu; ?>
-                    </nav>
+                <div class="nav" id="sidebar">
+                    <?php echo $navMenu; ?>
                 </div>
-                <a href="addCategory.php"><button class="big-button">Add New Category</button></a>
+
+                <div class="box">
+                    <h2>Add New Category</h2>
+
+                    <?php if (isset($error)) { ?>
+                        <p class="message" style="color: red;"><?php echo $error; ?></p>
+                    <?php } ?>
+
+                    <?php if (isset($success)) { ?>
+                        <p class="message" style="color: green;"><?php echo $success; ?></p>
+                    <?php } ?>
+
+                    <form method="post">
+
+
+                        <div class="field input">
+                            <label for="name">Category Name</label>
+                            <input type="text" id="name" name="name"><br>
+                        </div>
+
+                        <div class="field input">
+                            <label for="parent_id">Parent Category</label><br>
+
+                        </div>
+
+
+
+
+
+                        <select id="parent_id" name="parent_id">
+                            <option value="NULL">Main</option>
+                            <?php
+                            function buildCategoryOptions($categories, $parent_id = 0, $prefix = '')
+                            {
+                                global $connection;
+                                $html = '';
+                                foreach ($categories as $category) {
+                                    if ($category['parentId'] == $parent_id) {
+                                        $category_name = $prefix . $category['name'];
+                                        $html .= '<option value="' . $category['id'] . '">' . $category_name . '</option>';
+                                        $html .= buildCategoryOptions($categories, $category['id'], $category_name . '-');
+                                    }
+                                }
+                                return $html;
+                            }
+
+                            $query = "SELECT id, name, parentId FROM categories";
+                            $result = mysqli_query($connection, $query);
+                            $all_categories = array();
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $all_categories[] = $row;
+                            }
+
+                            echo buildCategoryOptions($all_categories);
+                            ?>
+                        </select>
+
+                        <br><br>
+
+                        <input type="submit" value="Add Category" class="btn">
+                    </form>
+                    <br>
+                    <a href="index.php">Back to Dashboard</a>
+                </div>
             </div>
         </section>
 
@@ -77,8 +170,8 @@ $navMenu = buildMenu($categories);
 
 
 
-     
-    </div> <!-- End of main content container -->
+
+    </div>
 
     <script>
         function toggleSidebar() {
