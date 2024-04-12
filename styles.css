@@ -1643,6 +1643,14 @@ a:hover {
     text-align: left;
 }
 
+form{
+    text-align: center;
+}
+
+.btn{
+    width: 100%;
+}
+
 
 
 

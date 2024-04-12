@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Category name is required";
     } else {
 
-        $query = "INSERT INTO categories (name, parentId) VALUES (?, ?)";
+        $query = "UPDATE categories SET name=? WHERE id=?";
         $stmt = mysqli_prepare($connection, $query);
 
         mysqli_stmt_bind_param($stmt, "si", $name, $parentId);
@@ -24,9 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = mysqli_stmt_execute($stmt);
 
         if ($result) {
-            $success = "Category added successfully";
+            $success = "Category updated successfully";
         } else {
-            $error = "Failed to add category";
+            $error = "Failed to update category";
         }
 
         mysqli_stmt_close($stmt);
@@ -97,7 +97,7 @@ $navMenu = buildMenu($categories);
             </div>
 
             <div class="box">
-                <h2>Add New Category</h2>
+                <h2>Update Category</h2>
 
                 <?php if (isset($error)) { ?>
                     <p class="message" style="color: red;"><?php echo $error; ?></p>
@@ -109,19 +109,9 @@ $navMenu = buildMenu($categories);
 
                 <form method="post">
 
-
-                    <div class="field input">
-                        <label for="name">Category Name</label>
-                        <input type="text" id="name" name="name"><br>
-                    </div>
-
                     <div class="field input">
                         <label for="parent_id">Parent Category</label><br>
-
                     </div>
-
-
-
 
 
                     <select id="parent_id" name="parent_id">
@@ -152,9 +142,13 @@ $navMenu = buildMenu($categories);
                         ?>
                     </select>
 
-                    <br><br>
+                    <div class="field input">
+                        <label for="name">New Category Name</label>
+                        <input type="text" id="name" name="name"><br>
+                    </div>
 
-                    <input type="submit" value="Add Category" class="btn">
+
+                    <input type="submit" value="Update Category" class="btn">
                 </form>
                 <br>
                 <a href="index.php">Back to Dashboard</a>

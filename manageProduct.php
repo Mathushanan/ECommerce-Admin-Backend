@@ -1,3 +1,4 @@
+
 <?php
 
 
@@ -33,14 +34,44 @@
         </ul>
     </nav>
 
+
+
+
+
+
     <section class="section__container buttons__container">
-
         <div class="webadmin_dashboard_buttons_container">
-            <a href="manageCategory.php"><button class="big-button">Manage Categories</button></a>
-            <a href="manageProduct.php"><button class="big-button">Manage Products</button></a>
-
+            <a href="addCategory.php"><button class="big-button">Add New Category</button></a>
+            <a href="updateCategory.php"><button class="big-button">Update Category</button></a>
+            <a href="deleteCategory.php"><button class="big-button">Delete Category</button></a>
+            
         </div>
+
     </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

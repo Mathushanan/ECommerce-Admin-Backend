@@ -97,7 +97,7 @@ $navMenu = buildMenu($categories);
             </div>
 
             <div class="box">
-                <h2>Add New Category</h2>
+                <h2>Delete Category</h2>
 
                 <?php if (isset($error)) { ?>
                     <p class="message" style="color: red;"><?php echo $error; ?></p>
@@ -109,20 +109,14 @@ $navMenu = buildMenu($categories);
 
                 <form method="post">
 
-
-                    <div class="field input">
-                        <label for="name">Category Name</label>
-                        <input type="text" id="name" name="name"><br>
-                    </div>
-
                     <div class="field input">
                         <label for="parent_id">Parent Category</label><br>
-
                     </div>
 
-
-
-
+                    <div class="field input">
+                        <label for="name">New Category Name</label>
+                        <input type="text" id="name" name="name"><br>
+                    </div>
 
                     <select id="parent_id" name="parent_id">
                         <option value="NULL">Main</option>
